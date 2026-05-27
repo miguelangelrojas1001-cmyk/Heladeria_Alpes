@@ -1,0 +1,16 @@
+# Configuración con credenciales — NO subir
+config/database.php
+
+# Imágenes subidas por usuarios
+public/img/*.jpeg
+public/img/*.jpg
+public/img/*.png
+!public/img/logo.png
+
+# Logs y temporales
+*.log
+*.tmp
+/scripts/
+
+# Dependencias (si en algún momento usas Composer)
+/vendor/
