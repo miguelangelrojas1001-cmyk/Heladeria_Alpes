@@ -1,23 +1,56 @@
 <style>
-    .admin-header { margin-bottom: 1.75rem; }
+    .admin-header { margin-bottom: 1.5rem; }
     .admin-header h1 { font-size: 1.6rem; font-weight: 900; color: var(--heading-color); margin-bottom: .3rem; }
     .admin-header p { color: var(--muted-color); font-size: .93rem; }
+
+    /* Tabs estilo Reportes */
+    .module-tabs { display: flex; gap: .35rem; border-bottom: 2px solid var(--tab-border); margin-bottom: 1.5rem; }
+    .module-tab {
+        padding: .65rem 1.3rem; font-size: .9rem; font-weight: 700;
+        color: var(--tab-txt); background: none; border: none; cursor: pointer;
+        border-bottom: 2px solid transparent; margin-bottom: -2px;
+        font-family: 'Nunito', sans-serif; transition: color .15s, border-color .15s;
+        display: inline-flex; align-items: center; gap: .45rem;
+    }
+    .module-tab:hover { color: #2563EB; }
+    .module-tab.active { color: #2563EB; border-bottom-color: #2563EB; }
+    .module-tab-panel { display: none; }
+    .module-tab-panel.active { display: block; }
+
     .card { background: var(--card-bg); border-radius: 16px; box-shadow: var(--card-shadow); padding: 1.5rem; margin-bottom: 1.5rem; border: 1px solid var(--card-border); transition: background .25s, border-color .25s; }
     .card-title { font-size: 1.05rem; font-weight: 800; color: var(--heading-color); margin-bottom: 1.25rem; }
-    .grid-2 { display: grid; grid-template-columns: 1fr 2fr; gap: 1.5rem; }
+    .grid-forms { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+    @media(max-width:850px){ .grid-forms { grid-template-columns: 1fr; } }
+    
     label { display: block; font-size: .8rem; font-weight: 700; color: var(--label-color); margin-bottom: .35rem; }
-    input, select { width: 100%; padding: .65rem .9rem; border: 1.5px solid var(--input-border); border-radius: 9px; font-family: 'Nunito', sans-serif; font-size: .9rem; color: var(--input-color); background: var(--input-bg); outline: none; margin-bottom: .85rem; transition: background .25s, border-color .25s, color .25s; }
+    input, select {
+        width: 100%; padding: .65rem .9rem; border: 1.5px solid var(--input-border);
+        border-radius: 9px; font-family: 'Nunito', sans-serif; font-size: .9rem;
+        color: var(--input-color); background: var(--input-bg); outline: none;
+        margin-bottom: .85rem; transition: background .25s, border-color .25s, color .25s;
+    }
+    select option {
+        background: var(--card-bg);
+        color: var(--heading-color);
+        padding: .5rem;
+    }
     input:focus, select:focus { border-color: #2563EB; box-shadow: 0 0 0 3px rgba(37,99,235,.1); background: var(--input-focus-bg); }
+    
     .btn { padding: .65rem 1.4rem; border-radius: 9px; border: none; cursor: pointer; font-family: 'Nunito', sans-serif; font-weight: 700; font-size: .88rem; transition: .2s; }
     .btn-primary { background: #2563EB; color: #fff; }
     .btn-primary:hover { background: #1D4ED8; }
     .btn-danger  { background: #EF4444; color: #fff; font-size: .78rem; padding: .35rem .8rem; border-radius: 7px; border: none; cursor: pointer; font-family: 'Nunito', sans-serif; font-weight: 700; }
     .btn-success { background: #10B981; color: #fff; }
+    .btn-success:hover { background: #059669; }
     .btn-warning { background: #F59E0B; color: #fff; }
+    .btn-warning:hover { background: #D97706; }
+
     table { width: 100%; border-collapse: collapse; }
     th { background: var(--table-head-bg); font-size: .78rem; font-weight: 800; color: var(--table-head-txt); text-transform: uppercase; letter-spacing: .05em; padding: .75rem 1rem; text-align: left; border-bottom: 1px solid var(--card-border); }
     td { padding: .75rem 1rem; font-size: .88rem; color: var(--body-color); border-bottom: 1px solid var(--table-row-bd); vertical-align: middle; }
     tr:last-child td { border-bottom: none; }
+    tr:hover td { background: var(--table-hover); }
+
     .badge { display: inline-block; padding: .25rem .75rem; border-radius: 20px; font-size: .75rem; font-weight: 700; }
     .badge-ok      { background: #D1FAE5; color: #065F46; }
     .badge-low     { background: #FEF3C7; color: #92400E; }
@@ -25,143 +58,86 @@
     .badge-entrada { background: #DBEAFE; color: #1E40AF; }
     .badge-salida  { background: #FCE7F3; color: #9D174D; }
     .badge-cat     { background: #EDE9FE; color: #5B21B6; font-size: .72rem; padding: .2rem .6rem; }
+    
     .alert-ok  { background: var(--alert-ok-bg); border: 1px solid var(--alert-ok-bd); color: var(--alert-ok-txt); padding: .75rem 1rem; border-radius: 10px; margin-bottom: 1.25rem; font-size: .88rem; }
     .alert-err { background: var(--alert-err-bg); border: 1px solid var(--alert-err-bd); color: var(--alert-err-txt); padding: .75rem 1rem; border-radius: 10px; margin-bottom: 1.25rem; font-size: .88rem; }
     .msg-row { display: flex; gap: 1rem; margin-bottom: 0; }
     .msg-row > div { flex: 1; }
     .w-full { width: 100%; margin-top: .5rem; }
-    .filter-bar { display: flex; align-items: center; gap: .5rem; flex-wrap: wrap; margin-bottom: 1.1rem; }
+    
+    .filter-bar { display: flex; align-items: center; gap: .5rem; flex-wrap: wrap; margin-bottom: 1.25rem; }
     .filter-bar span { font-size: .78rem; font-weight: 800; color: var(--muted-color); text-transform: uppercase; letter-spacing: .05em; margin-right: .25rem; }
-    .filter-btn { padding: .3rem .85rem; border-radius: 20px; border: 1.5px solid var(--filter-btn-bd); background: var(--filter-btn-bg); color: var(--filter-btn-txt); font-family: 'Nunito', sans-serif; font-size: .78rem; font-weight: 700; cursor: pointer; transition: .15s; white-space: nowrap; }
+    .filter-btn { padding: .35rem .95rem; border-radius: 20px; border: 1.5px solid var(--filter-btn-bd); background: var(--filter-btn-bg); color: var(--filter-btn-txt); font-family: 'Nunito', sans-serif; font-size: .8rem; font-weight: 700; cursor: pointer; transition: .15s; white-space: nowrap; }
     .filter-btn:hover { border-color: #2563EB; color: #2563EB; background: #EFF6FF; }
     .filter-btn.active { background: #2563EB; color: #fff; border-color: #2563EB; }
-    .no-results-row { display: none; }
-    .no-results-row td { text-align: center; color: var(--muted-color); padding: 2rem; }
 </style>
 
 <div class="admin-header">
     <h1 style="display:flex;align-items:center;gap:.5rem;">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width: 24px; height: 24px;"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width: 26px; height: 26px;"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg>
         <span>Inventario de Insumos</span>
     </h1>
-    <p>Gestiona el stock de insumos y registra entradas y salidas.</p>
+    <p>Gestiona el stock de insumos, crea nuevos ingredientes y registra movimientos de entradas y salidas.</p>
 </div>
 
-<?php if (!empty($mensaje)): ?>
-    <div class="alert-<?= $mensaje['tipo'] === 'ok' ? 'ok' : 'err' ?>" style="display:flex;align-items:center;gap:.35rem;">
-        <?php if ($mensaje['tipo'] === 'ok'): ?>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width: 16px; height: 16px; flex-shrink: 0;"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-        <?php else: ?>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width: 16px; height: 16px; flex-shrink: 0;"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-        <?php endif; ?>
-        <span><?= htmlspecialchars($mensaje['texto']) ?></span>
+<?php if (!empty($error)): ?>
+    <div class="alert-err" style="display:flex;align-items:center;gap:.35rem;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width: 16px; height: 16px; flex-shrink: 0;"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        <span><?= htmlspecialchars($error) ?></span>
     </div>
 <?php endif; ?>
 
-<div class="grid-2">
+<!-- Pestañas del Módulo -->
+<div class="module-tabs">
+    <button class="module-tab active" id="tab-btn-stock" onclick="switchTab('tab-stock', this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 16px; height: 16px;"><line x1="16.5" y1="9.4" x2="7.5" y2="4.21"/><polygon points="12 22.08 12 12 3 6.92 3 17.08 12 22.08"/><polygon points="12 22.08 12 12 21 6.92 21 17.08 12 22.08"/><polygon points="12 12 3 6.92 12 1.85 21 6.92 12 12"/></svg>
+        Insumos en Stock (<?= count($insumos) ?>)
+    </button>
+    <button class="module-tab" id="tab-btn-registro" onclick="switchTab('tab-registro', this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 16px; height: 16px;"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Nuevo Insumo / Registrar Movimiento
+    </button>
+    <button class="module-tab" id="tab-btn-movimientos" onclick="switchTab('tab-movimientos', this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 16px; height: 16px;"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+        Movimientos (<?= count($movimientos) ?>)
+    </button>
+</div>
 
-    <!-- Columna izquierda: formularios -->
-    <div>
-        <!-- Nuevo insumo -->
-        <div class="card">
-            <div class="card-title" style="display:flex;align-items:center;gap:.35rem;">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width: 16px; height: 16px;"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                <span>Nuevo Insumo</span>
-            </div>
-            <form method="POST" action="index.php?page=admin_inventario">
-                <input type="hidden" name="accion" value="agregar_insumo">
-                <label>Nombre</label>
-                <input type="text" name="nombre" placeholder="Ej: Leche" required>
-                <label>Categoría</label>
-                <select name="categoria">
-                    <option value="General">General</option>
-                    <option value="Sabores de Helado">Sabores de Helado</option>
-                    <option value="Toppings Frutas">Toppings Frutas</option>
-                    <option value="Toppings Premium">Toppings Premium</option>
-                    <option value="Toppings Dulces">Toppings Dulces</option>
-                    <option value="Salsas y Untables">Salsas y Untables</option>
-                    <option value="Base Waffles">Base Waffles</option>
-                    <option value="Base Canastas">Base Canastas</option>
-                </select>
-                <div class="msg-row">
-                    <div>
-                        <label>Stock inicial</label>
-                        <input type="number" name="stock_actual" step="0.01" min="0" placeholder="0">
-                    </div>
-                    <div>
-                        <label>Stock mínimo</label>
-                        <input type="number" name="stock_minimo" step="0.01" min="0" placeholder="0">
-                    </div>
-                </div>
-                <label>Unidad de medida</label>
-                <select name="unidad_medida">
-                    <option value="kg">kg</option>
-                    <option value="g">g</option>
-                    <option value="L">L</option>
-                    <option value="ml">ml</option>
-                    <option value="unidad">unidad</option>
-                </select>
-                <button type="submit" class="btn btn-primary w-full">Agregar insumo</button>
-            </form>
+<!-- PANEL 1: Insumos en Stock -->
+<div class="module-tab-panel active" id="tab-stock">
+    <div class="card">
+        <div class="card-title">Listado de Insumos en Stock (<?= count($insumos) ?>)</div>
+
+        <?php
+            $categoriasInsumos = [
+                'Sabores de Helado',
+                'Toppings Dulces',
+                'Toppings Frutas',
+                'Toppings Premium',
+                'Salsas y Untables',
+                'Waffles',
+                'Canastas',
+                'General'
+            ];
+        ?>
+
+        <!-- Filtros por categoría (SIN filtro 'Todas') -->
+        <div class="filter-bar">
+            <span>Categorías:</span>
+            <?php foreach ($categoriasInsumos as $idx => $catName): ?>
+                <button class="filter-btn <?= $idx === 0 ? 'active' : '' ?>" onclick="filtrarCategoriaInsumos('<?= htmlspecialchars($catName) ?>', this)">
+                    <?= htmlspecialchars($catName) ?>
+                </button>
+            <?php endforeach; ?>
         </div>
 
-        <!-- Registrar movimiento -->
-        <div class="card">
-            <div class="card-title" style="display:flex;align-items:center;gap:.35rem;">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width: 16px; height: 16px;"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
-                <span>Registrar Movimiento</span>
-            </div>
-            <form method="POST" action="index.php?page=admin_inventario">
-                <input type="hidden" name="accion" id="accion_mov" value="entrada">
-                <label>Insumo</label>
-                <select name="idinsumo" required>
-                    <option value="">Seleccionar insumo</option>
-                    <?php foreach ($insumos as $ins): ?>
-                        <option value="<?= $ins['idinsumo'] ?>">
-                            <?= htmlspecialchars($ins['nombre']) ?> (<?= number_format($ins['stock_actual'],1) ?> <?= $ins['unidad_medida'] ?>)
-                        </option>
-                    <?php endforeach; ?>
-                </select>
-                <label>Cantidad</label>
-                <input type="number" name="cantidad" step="0.01" min="0.01" placeholder="0" required>
-                <div style="display:flex;gap:.75rem;margin-top:.25rem">
-                    <button type="submit" class="btn btn-success" style="flex:1;display:inline-flex;align-items:center;justify-content:center;gap:.3rem;"
-                            onclick="document.getElementById('accion_mov').value='entrada'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width: 14px; height: 14px;"><polyline points="18 15 12 9 6 15"/></svg> Entrada</button>
-                    <button type="submit" class="btn btn-warning" style="flex:1;display:inline-flex;align-items:center;justify-content:center;gap:.3rem;"
-                            onclick="document.getElementById('accion_mov').value='salida'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width: 14px; height: 14px;"><polyline points="6 9 12 15 18 9"/></svg> Salida</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- Columna derecha: tablas -->
-    <div>
-        <!-- Tabla de insumos -->
-        <div class="card">
-            <div class="card-title" style="display:flex;align-items:center;gap:.35rem;">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 16px; height: 16px;"><line x1="16.5" y1="9.4" x2="7.5" y2="4.21"/><polygon points="12 22.08 12 12 3 6.92 3 17.08 12 22.08"/><polygon points="12 22.08 12 12 21 6.92 21 17.08 12 22.08"/><polygon points="12 12 3 6.92 12 1.85 21 6.92 12 12"/></svg>
-                <span>Insumos en Stock (<?= count($insumos) ?>)</span>
-            </div>
-
-            <div class="filter-bar">
-                <span>Filtrar:</span>
-                <button class="filter-btn active" data-cat="todas">Todas</button>
-                <button class="filter-btn" data-cat="Sabores de Helado">Sabores de Helado</button>
-                <button class="filter-btn" data-cat="Toppings Frutas">Toppings Frutas</button>
-                <button class="filter-btn" data-cat="Toppings Premium">Toppings Premium</button>
-                <button class="filter-btn" data-cat="Toppings Dulces">Toppings Dulces</button>
-                <button class="filter-btn" data-cat="Salsas y Untables">Salsas y Untables</button>
-                <button class="filter-btn" data-cat="Base Waffles">Base Waffles</button>
-                <button class="filter-btn" data-cat="Base Canastas">Base Canastas</button>
-                <button class="filter-btn" data-cat="General">General</button>
-            </div>
-
+        <div style="overflow-x:auto">
             <table id="tabla-insumos">
                 <thead>
                     <tr>
                         <th>Insumo</th>
                         <th>Categoría</th>
-                        <th>Stock actual</th>
+                        <th>Stock Actual</th>
                         <th>Mínimo</th>
                         <th>Estado</th>
                         <th>Acciones</th>
@@ -169,16 +145,21 @@
                 </thead>
                 <tbody>
                     <?php foreach ($insumos as $ins): ?>
-                    <tr data-categoria="<?= htmlspecialchars($ins['categoria'] ?? 'General') ?>">
+                    <?php
+                        $catNorm = trim($ins['categoria'] ?? 'General');
+                        if ($catNorm === 'Base Waffles') $catNorm = 'Waffles';
+                        if ($catNorm === 'Base Canastas') $catNorm = 'Canastas';
+                    ?>
+                    <tr data-categoria="<?= htmlspecialchars($catNorm) ?>">
                         <td>
                             <strong><?= htmlspecialchars($ins['nombre']) ?></strong><br>
-                            <small style="color:var(--muted-color)"><?= htmlspecialchars($ins['unidad_medida']) ?></small>
+                            <small style="color:var(--muted-color); font-weight:600;">Unidad: <?= htmlspecialchars($ins['unidad_medida'] ?? '') ?></small>
                         </td>
                         <td>
-                            <span class="badge badge-cat"><?= htmlspecialchars($ins['categoria'] ?? 'General') ?></span>
+                            <span class="badge badge-cat"><?= htmlspecialchars($catNorm) ?></span>
                         </td>
-                        <td><?= number_format($ins['stock_actual'], 1) ?></td>
-                        <td><?= number_format($ins['stock_minimo'], 1) ?></td>
+                        <td><strong><?= number_format($ins['stock_actual'], 2) ?></strong> <?= htmlspecialchars($ins['unidad_medida'] ?? '') ?></td>
+                        <td><?= number_format($ins['stock_minimo'], 2) ?> <?= htmlspecialchars($ins['unidad_medida'] ?? '') ?></td>
                         <td>
                             <?php if ($ins['stock_actual'] <= 0): ?>
                                 <span class="badge badge-out">Sin stock</span>
@@ -189,49 +170,148 @@
                             <?php endif; ?>
                         </td>
                         <td>
-                            <a href="index.php?page=admin_inventario&eliminar_insumo=<?= $ins['idinsumo'] ?>"
+                            <a href="index.php?page=admin_inventario&eliminar=<?= $ins['idinsumo'] ?>"
                                onclick="return confirm('¿Eliminar este insumo? Se eliminarán también sus movimientos.')"
-                               class="btn-danger" style="display:inline-flex;align-items:center;gap:.25rem;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 12px; height: 12px;"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg> Eliminar</a>
+                               class="btn-danger" style="display:inline-flex;align-items:center;gap:.25rem;text-decoration:none;">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 12px; height: 12px;"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                                Eliminar
+                            </a>
                         </td>
                     </tr>
                     <?php endforeach; ?>
                     <?php if (empty($insumos)): ?>
                         <tr><td colspan="6" style="text-align:center;color:var(--muted-color);padding:2rem">Sin insumos registrados</td></tr>
                     <?php endif; ?>
-                    <tr class="no-results-row" id="no-results-row">
-                        <td colspan="6">No hay insumos en esta categoría.</td>
-                    </tr>
                 </tbody>
             </table>
         </div>
+    </div>
+</div>
 
-        <!-- Últimos movimientos -->
+<!-- PANEL 2: Nuevo Insumo & Registrar Movimiento -->
+<div class="module-tab-panel" id="tab-registro">
+    <div class="grid-forms">
+        <!-- Formulario 1: Nuevo Insumo -->
         <div class="card">
             <div class="card-title" style="display:flex;align-items:center;gap:.35rem;">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 16px; height: 16px;"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
-                <span>Últimos 30 movimientos</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width: 18px; height: 18px;"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                <span>Crear Nuevo Insumo</span>
             </div>
+            <form method="POST" action="index.php?page=admin_inventario">
+                <input type="hidden" name="accion_insumo" value="crear">
+                <label>Nombre del Insumo</label>
+                <input type="text" name="nombre" placeholder="Ej: Fresa Picada" required>
+                
+                <label>Categoría del Insumo</label>
+                <select name="categoria">
+                    <option value="Sabores de Helado">Sabores de Helado</option>
+                    <option value="Toppings Dulces">Toppings Dulces</option>
+                    <option value="Toppings Frutas">Toppings Frutas</option>
+                    <option value="Toppings Premium">Toppings Premium</option>
+                    <option value="Salsas y Untables">Salsas y Untables</option>
+                    <option value="Waffles">Waffles</option>
+                    <option value="Canastas">Canastas</option>
+                    <option value="General">General</option>
+                </select>
+
+                <div class="msg-row">
+                    <div>
+                        <label>Stock Inicial</label>
+                        <input type="number" name="stock_actual" step="0.01" min="0" placeholder="0">
+                    </div>
+                    <div>
+                        <label>Stock Mínimo (Alerta)</label>
+                        <input type="number" name="stock_minimo" step="0.01" min="0" placeholder="0">
+                    </div>
+                </div>
+
+                <label>Unidad de Medida</label>
+                <select name="unidad_medida">
+                    <option value="kg">kg (Kilogramos)</option>
+                    <option value="g">g (Gramos)</option>
+                    <option value="L">L (Litros)</option>
+                    <option value="ml">ml (Mililitros)</option>
+                    <option value="unidad">unidad (Unidades)</option>
+                </select>
+
+                <button type="submit" class="btn btn-primary w-full">+ Registrar Insumo</button>
+            </form>
+        </div>
+
+        <!-- Formulario 2: Registrar Movimiento -->
+        <div class="card">
+            <div class="card-title" style="display:flex;align-items:center;gap:.35rem;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width: 18px; height: 18px;"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+                <span>Registrar Entrada / Salida</span>
+            </div>
+            <form method="POST" action="index.php?page=admin_inventario">
+                <input type="hidden" name="accion_mov" id="accion_mov" value="entrada">
+                
+                <label>Seleccionar Insumo</label>
+                <select name="idinsumo" required style="font-weight:600;">
+                    <option value="" style="color:var(--muted-color)">-- Elegir insumo a modificar --</option>
+                    <?php foreach ($insumos as $ins): ?>
+                        <option value="<?= $ins['idinsumo'] ?>">
+                            <?= htmlspecialchars($ins['nombre']) ?> (Stock actual: <?= number_format($ins['stock_actual'], 2) ?> <?= htmlspecialchars($ins['unidad_medida'] ?? '') ?>)
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+
+                <label>Cantidad a Ingresar o Descontar</label>
+                <input type="number" name="cantidad" step="0.01" min="0.01" placeholder="Ej: 5.0" required>
+
+                <div style="display:flex; gap:.75rem; margin-top:.75rem">
+                    <button type="submit" class="btn btn-success" style="flex:1; display:inline-flex; align-items:center; justify-content:center; gap:.35rem;"
+                            onclick="document.getElementById('accion_mov').value='entrada'">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width: 16px; height: 16px;"><polyline points="18 15 12 9 6 15"/></svg>
+                        Registrar Entrada
+                    </button>
+                    <button type="submit" class="btn btn-warning" style="flex:1; display:inline-flex; align-items:center; justify-content:center; gap:.35rem;"
+                            onclick="document.getElementById('accion_mov').value='salida'">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width: 16px; height: 16px;"><polyline points="6 9 12 15 18 9"/></svg>
+                        Registrar Salida
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- PANEL 3: Movimientos -->
+<div class="module-tab-panel" id="tab-movimientos">
+    <div class="card">
+        <div class="card-title" style="display:flex;align-items:center;gap:.35rem;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width: 18px; height: 18px;"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+            <span>Histórico de Movimientos de Inventario</span>
+        </div>
+        <div style="overflow-x:auto">
             <table>
                 <thead>
-                    <tr><th>Insumo</th><th>Tipo</th><th>Cantidad</th><th>Fecha</th></tr>
+                    <tr><th>Insumo</th><th>Tipo</th><th>Cantidad</th><th>Fecha y Hora</th></tr>
                 </thead>
                 <tbody>
                     <?php foreach ($movimientos as $mov): ?>
                     <tr>
-                        <td><?= htmlspecialchars($mov['insumo_nombre'] ?? '-') ?></td>
+                        <td><strong><?= htmlspecialchars($mov['insumo_nombre'] ?? '-') ?></strong></td>
                         <td>
-                            <?php if ($mov['tipo_entrada']): ?>
-                                <span class="badge badge-entrada" style="display:inline-flex;align-items:center;gap:.2rem;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="width: 10px; height: 10px;"><polyline points="18 15 12 9 6 15"/></svg> Entrada</span>
+                            <?php if (!empty($mov['tipo_entrada'])): ?>
+                                <span class="badge badge-entrada" style="display:inline-flex;align-items:center;gap:.25rem;">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="width: 11px; height: 11px;"><polyline points="18 15 12 9 6 15"/></svg>
+                                    Entrada
+                                </span>
                             <?php else: ?>
-                                <span class="badge badge-salida" style="display:inline-flex;align-items:center;gap:.2rem;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="width: 10px; height: 10px;"><polyline points="6 9 12 15 18 9"/></svg> Salida</span>
+                                <span class="badge badge-salida" style="display:inline-flex;align-items:center;gap:.25rem;">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="width: 11px; height: 11px;"><polyline points="6 9 12 15 18 9"/></svg>
+                                    Salida
+                                </span>
                             <?php endif; ?>
                         </td>
-                        <td><?= number_format($mov['cantidad'], 1) ?></td>
-                        <td><?= $mov['fecha'] ? date('d/m/Y H:i', strtotime($mov['fecha'])) : '-' ?></td>
+                        <td><strong><?= number_format($mov['cantidad'], 2) ?></strong></td>
+                        <td><?= $mov['fecha'] ? date('d/m/Y H:i A', strtotime($mov['fecha'])) : '-' ?></td>
                     </tr>
                     <?php endforeach; ?>
                     <?php if (empty($movimientos)): ?>
-                        <tr><td colspan="4" style="text-align:center;color:var(--muted-color);padding:2rem">Sin movimientos</td></tr>
+                        <tr><td colspan="4" style="text-align:center;color:var(--muted-color);padding:2rem">Sin movimientos registrados</td></tr>
                     <?php endif; ?>
                 </tbody>
             </table>
@@ -240,32 +320,36 @@
 </div>
 
 <script>
-(function () {
-    const btns  = document.querySelectorAll('.filter-btn');
-    const rows  = document.querySelectorAll('#tabla-insumos tbody tr[data-categoria]');
-    const noRes = document.getElementById('no-results-row');
+// Switch de Tabs
+function switchTab(panelId, btn) {
+    document.querySelectorAll('.module-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.module-tab-panel').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    const panel = document.getElementById(panelId);
+    if (panel) panel.classList.add('active');
+}
 
-    btns.forEach(function (btn) {
-        btn.addEventListener('click', function () {
-            btns.forEach(function (b) { b.classList.remove('active'); });
-            btn.classList.add('active');
+// Filtro de categorías en tabla de insumos (sin 'Todas')
+function filtrarCategoriaInsumos(catNombre, btn) {
+    document.querySelectorAll('.filter-bar .filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
 
-            var cat = btn.getAttribute('data-cat');
-            var visible = 0;
-
-            rows.forEach(function (row) {
-                if (cat === 'todas' || row.getAttribute('data-categoria') === cat) {
-                    row.style.display = '';
-                    visible++;
-                } else {
-                    row.style.display = 'none';
-                }
-            });
-
-            if (noRes) {
-                noRes.style.display = visible === 0 ? '' : 'none';
-            }
-        });
+    document.querySelectorAll('#tabla-insumos tbody tr[data-categoria]').forEach(row => {
+        const rowCat = row.getAttribute('data-categoria');
+        if (rowCat === catNombre) {
+            row.style.display = '';
+        } else {
+            row.style.display = 'none';
+        }
     });
-}());
+}
+
+// Iniciar filtro en la primera categoría activa al cargar
+document.addEventListener('DOMContentLoaded', function() {
+    const primerBtn = document.querySelector('.filter-bar .filter-btn.active');
+    if (primerBtn) {
+        const cat = primerBtn.innerText.trim();
+        filtrarCategoriaInsumos(cat, primerBtn);
+    }
+});
 </script>
