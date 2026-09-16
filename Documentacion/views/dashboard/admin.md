@@ -40,5 +40,14 @@ Gestión de usuarios del sistema.
 - Formulario para crear nuevos usuarios con cualquier rol
 - Botón eliminar con confirmación
 
+### reportes.php
+Reportes de ventas, inventario y contabilidad. Ver ficha detallada en [admin/reportes.md](admin/reportes.md).
+- Filtro por rango de fechas (por defecto, el mes en curso)
+- Tarjetas de KPI: pedidos, ingresos brutos, ingresos completados, ticket promedio
+- Ingresos por día, métodos de pago, top 10 de productos y ventas por categoría
+- Rendimiento de domiciliarios, insumos en stock crítico y movimientos de inventario
+- Contabilidad: ingresos confirmados, gasto en domicilios, ganancia estimada y tendencia de 6 meses
+- Listado de notificaciones de stock mínimo
+
 ## Variables Comunes Recibidas
 Cada vista recibe las variables preparadas por `AdminController`. Ninguna hace queries directas a la BD.
