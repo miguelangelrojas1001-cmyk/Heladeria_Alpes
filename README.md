@@ -198,6 +198,16 @@ El archivo `sql/bdalpes.sql` contiene:
 > en esta versión: el carrito se gestiona en `$_SESSION` y se materializa en `pedido` y
 > `detalle_pedido` al confirmar la compra.
 
+## Documentación Técnica Adicional
+
+Para más detalles sobre la arquitectura, base de datos y configuración del proyecto, consulta los siguientes documentos en la carpeta `Documentacion/`:
+
+- 📖 [Guía de Instalación y Despliegue Local](Documentacion/GUIA_INSTALACION.md)
+- 🗄️ [Diccionario de Datos de la Base de Datos (`bdalpes`)](Documentacion/DICCIONARIO_DE_DATOS.md)
+- 🏛️ [Arquitectura y Flujo MVC](Documentacion/ARQUITECTURA_MVC.md)
+- 🔐 [Matriz de Roles y Permisos](Documentacion/MATRIZ_ROLES_PERMISOS.md)
+- 📊 [Informe de Concordancia del Sistema](Documentacion/INFORME_CONCORDANCIA.md)
+
 ---
 
 ## Notas de la versión 1.0
@@ -209,3 +219,4 @@ El archivo `sql/bdalpes.sql` contiene:
 - El costo de domicilio es fijo ($2.000) y la cobertura es únicamente Campoalegre.
 - El estado detallado de cada requerimiento está en la sección 13 del documento
   *REQ.SOFT Alpes*.
+
